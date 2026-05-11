@@ -1,14 +1,4 @@
-PRODUCT_BRAND ?= PixelExperience
-
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
-
-ifeq ($(PRODUCT_GMS_CLIENTID_BASE),)
-PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
-    ro.com.google.clientidbase=android-google
-else
-PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
-    ro.com.google.clientidbase=$(PRODUCT_GMS_CLIENTID_BASE)
-endif
 
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
     dalvik.vm.debug.alloc=0 \
@@ -22,13 +12,8 @@ PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
     persist.sys.disable_rescue=true \
     ro.setupwizard.rotation_locked=true
 
-ifeq ($(TARGET_BUILD_VARIANT),eng)
 # Disable ADB authentication
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += ro.adb.secure=0
-else
-# Enable ADB authentication
-PRODUCT_SYSTEM_DEFAULT_PROPERTIES += ro.adb.secure=1
-endif
 
 # AOSP recovery flashing
 ifeq ($(TARGET_USES_AOSP_RECOVERY),true)
@@ -44,20 +29,10 @@ PRODUCT_COPY_FILES += \
     vendor/aosp/prebuilt/common/bin/setup_busybox.sh:install/bin/setup_busybox.sh \
     vendor/aosp/prebuilt/common/bin/umount_all.sh:install/bin/umount_all.sh
 
-# OTA
-ifneq ($(TARGET_BUILD_VARIANT),user)
-PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
-    ro.ota.allow_downgrade=true
-endif
-
 # Some permissions
 PRODUCT_COPY_FILES += \
     vendor/aosp/config/permissions/backup.xml:system/etc/sysconfig/backup.xml \
     vendor/aosp/config/permissions/privapp-permissions-lineagehw.xml:$(TARGET_COPY_OUT_PRODUCT)/etc/permissions/privapp-permissions-lineagehw.xml
-
-# Copy all custom init rc files
-$(foreach f,$(wildcard vendor/aosp/prebuilt/common/etc/init/*.rc),\
-    $(eval PRODUCT_COPY_FILES += $(f):system/etc/init/$(notdir $f)))
 
 # Copy over added mimetype supported in libcore.net.MimeUtils
 PRODUCT_COPY_FILES += \
@@ -126,16 +101,7 @@ PRODUCT_PACKAGES += \
 
 # Dex preopt
 PRODUCT_DEXPREOPT_SPEED_APPS += \
-    SystemUI \
-    NexusLauncherRelease
-
-# Themed bootanimation
-TARGET_MISC_BLOCK_OFFSET ?= 0
-PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
-    ro.misc.block.offset=$(TARGET_MISC_BLOCK_OFFSET)
-PRODUCT_PACKAGES += \
-    misc_writer_system \
-    themed_bootanimation
+    SystemUI
 
 # Screen recorder
 PRODUCT_PACKAGES += \
@@ -155,9 +121,6 @@ PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
 
 # Branding
 include vendor/aosp/config/branding.mk
-
-# OTA
-include vendor/aosp/config/ota.mk
 
 # GApps
 include vendor/gapps/config.mk
