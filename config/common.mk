@@ -1,14 +1,4 @@
-PRODUCT_BRAND ?= PixelExperience
-
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
-
-ifeq ($(PRODUCT_GMS_CLIENTID_BASE),)
-PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
-    ro.com.google.clientidbase=android-google
-else
-PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
-    ro.com.google.clientidbase=$(PRODUCT_GMS_CLIENTID_BASE)
-endif
 
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
     dalvik.vm.debug.alloc=0 \
@@ -22,25 +12,16 @@ PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
     persist.sys.disable_rescue=true \
     ro.setupwizard.rotation_locked=true
 
-ifeq ($(TARGET_BUILD_VARIANT),eng)
-# Disable ADB authentication
-PRODUCT_SYSTEM_DEFAULT_PROPERTIES += ro.adb.secure=0
-else
 # Enable ADB authentication
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += ro.adb.secure=1
 
 # Disable extra StrictMode features on all non-engineering builds
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += persist.sys.strictmode.disable=true
-endif
 
 # Some permissions
 PRODUCT_COPY_FILES += \
     vendor/aosp/config/permissions/backup.xml:system/etc/sysconfig/backup.xml \
     vendor/aosp/config/permissions/privapp-permissions-lineagehw.xml:$(TARGET_COPY_OUT_SYSTEM_EXT)/etc/permissions/privapp-permissions-lineagehw.xml
-
-# Copy all custom init rc files
-$(foreach f,$(wildcard vendor/aosp/prebuilt/common/etc/init/*.rc),\
-    $(eval PRODUCT_COPY_FILES += $(f):system/etc/init/$(notdir $f)))
 
 # Enable Android Beam on all targets
 PRODUCT_COPY_FILES += \
@@ -146,12 +127,6 @@ PRODUCT_PRODUCT_PROPERTIES += \
     ro.url.legal=http://www.google.com/intl/%s/mobile/android/basic/phone-legal.html \
     ro.url.legal.android_privacy=http://www.google.com/intl/%s/mobile/android/basic/privacy.html
 
-# Google Play services configuration
-PRODUCT_PRODUCT_PROPERTIES += \
-    ro.com.google.clientidbase=android-google \
-    ro.error.receiver.system.apps=com.google.android.gms \
-    ro.atrace.core.services=com.google.android.gms,com.google.android.gms.ui,com.google.android.gms.persistent
-
 # TextClassifier
 PRODUCT_PACKAGES += \
 	libtextclassifier_annotator_en_model \
@@ -170,11 +145,6 @@ PRODUCT_PRODUCT_PROPERTIES += \
 # Pixel customization
 TARGET_SUPPORTS_GOOGLE_RECORDER ?= true
 TARGET_INCLUDE_STOCK_ARCORE ?= true
-TARGET_INCLUDE_LIVE_WALLPAPERS ?= true
-ifeq ($(TARGET_INCLUDE_LIVE_WALLPAPERS),true)
-PRODUCT_PACKAGES += \
-    PixelLiveWallpapersOverlay
-endif
 
 # Face Unlock
 TARGET_FACE_UNLOCK_SUPPORTED ?= true
@@ -193,14 +163,8 @@ $(call inherit-product, vendor/aosp/config/audio.mk)
 # Bootanimation
 $(call inherit-product, vendor/aosp/config/bootanimation.mk)
 
-# Fonts
-$(call inherit-product, vendor/aosp/config/fonts.mk)
-
 # GApps
 $(call inherit-product, vendor/gapps/config.mk)
-
-# OTA
-$(call inherit-product, vendor/aosp/config/ota.mk)
 
 # RRO Overlays
 $(call inherit-product, vendor/aosp/config/rro_overlays.mk)
