@@ -1,5 +1,15 @@
 # Build fingerprint
-CUSTOM_DEVICE ?= $(TARGET_DEVICE)
+BUILD_SIGNATURE_KEYS := release-keys
+BUILD_FINGERPRINT := GM/GM9PRO/GM9PRO_sprout:9/PKQ1.180904.001/254:user/release-keys
+
+ADDITIONAL_BUILD_PROPERTIES += \
+    ro.build.fingerprint=$(BUILD_FINGERPRINT)
+
+# AOSP recovery flashing
+ifeq ($(TARGET_USES_AOSP_RECOVERY),true)
+ADDITIONAL_BUILD_PROPERTIES += \
+    persist.sys.recovery_update=true
+endif
 
 # Branding
 CUSTOM_BUILD_TYPE ?= testing
