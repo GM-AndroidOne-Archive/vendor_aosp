@@ -1,6 +1,5 @@
 # Build fingerprint
-BUILD_SIGNATURE_KEYS := release-keys
-BUILD_FINGERPRINT := GM/GM9PRO/GM9PRO_sprout:9/PKQ1.180904.001/254:user/release-keys
+BUILD_FINGERPRINT := GM/GM9PRO/GM9PRO_sprout:9/PKQ1.180904.001/314:user/release-keys
 
 ADDITIONAL_BUILD_PROPERTIES += \
     ro.build.fingerprint=$(BUILD_FINGERPRINT)

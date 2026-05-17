@@ -1,20 +1,12 @@
 PRODUCT_BUILD_PROP_OVERRIDES += BUILD_UTC_DATE=0
 
-PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
-    dalvik.vm.debug.alloc=0 \
-    ro.url.legal=http://www.google.com/intl/%s/mobile/android/basic/phone-legal.html \
-    ro.url.legal.android_privacy=http://www.google.com/intl/%s/mobile/android/basic/privacy.html \
-    ro.error.receiver.system.apps=com.google.android.gms \
-    ro.setupwizard.enterprise_mode=1 \
-    ro.com.android.dataroaming=false \
-    ro.atrace.core.services=com.google.android.gms,com.google.android.gms.ui,com.google.android.gms.persistent \
-    ro.com.android.dateformat=MM-dd-yyyy \
-    persist.sys.disable_rescue=true \
-    ro.setupwizard.rotation_locked=true
-
 # Enable ADB authentication
+ifeq ($(TARGET_BUILD_VARIANT),eng)
+# Disable ADB authentication
+PRODUCT_SYSTEM_DEFAULT_PROPERTIES += ro.adb.secure=0
+else
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += ro.adb.secure=1
-
+endif
 # Disable extra StrictMode features on all non-engineering builds
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += persist.sys.strictmode.disable=true
 
@@ -112,7 +104,18 @@ PRODUCT_PRODUCT_PROPERTIES += \
     setupwizard.theme=glif_v3_light \
     setupwizard.feature.skip_button_use_mobile_data.carrier1839=true \
     setupwizard.feature.show_pai_screen_in_main_flow.carrier1839=false \
-    setupwizard.feature.show_pixel_tos=false
+    setupwizard.feature.show_pixel_tos=false \
+    ro.error.receiver.system.apps=com.google.android.gms \
+    ro.com.android.dataroaming=true \
+    ro.atrace.core.services=com.google.android.gms,com.google.android.gms.ui,com.google.android.gms.persistent \
+    ro.com.android.dateformat=MM-dd-yyyy \
+    ro.com.google.acsa=true \
+    ro.com.google.clientidbase=android-a1-gm-rev1 \
+    ro.com.google.gmsversion=9_201903 \
+    ro.setupwizard.rotation_locked=true
+
+PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
+    dalvik.vm.debug.alloc=0
 
 # StorageManager configuration
 PRODUCT_PRODUCT_PROPERTIES += \
@@ -121,11 +124,6 @@ PRODUCT_PRODUCT_PROPERTIES += \
 # OPA configuration
 PRODUCT_PRODUCT_PROPERTIES += \
     ro.opa.eligible_device=true
-
-# Google legal
-PRODUCT_PRODUCT_PROPERTIES += \
-    ro.url.legal=http://www.google.com/intl/%s/mobile/android/basic/phone-legal.html \
-    ro.url.legal.android_privacy=http://www.google.com/intl/%s/mobile/android/basic/privacy.html
 
 # TextClassifier
 PRODUCT_PACKAGES += \
@@ -143,19 +141,16 @@ PRODUCT_PRODUCT_PROPERTIES += \
     ro.iorapd.enable=true
 
 # Pixel customization
-TARGET_SUPPORTS_GOOGLE_RECORDER ?= true
-TARGET_INCLUDE_STOCK_ARCORE ?= true
+TARGET_SUPPORTS_GOOGLE_RECORDER ?= false
+TARGET_INCLUDE_STOCK_ARCORE ?= false
 
 # Face Unlock
-TARGET_FACE_UNLOCK_SUPPORTED ?= true
-ifeq ($(TARGET_FACE_UNLOCK_SUPPORTED),true)
 PRODUCT_PACKAGES += \
     FaceUnlockService
 PRODUCT_SYSTEM_DEFAULT_PROPERTIES += \
     ro.face_unlock_service.enabled=$(TARGET_FACE_UNLOCK_SUPPORTED)
 PRODUCT_COPY_FILES += \
     frameworks/native/data/etc/android.hardware.biometrics.face.xml:$(TARGET_COPY_OUT_SYSTEM)/etc/permissions/android.hardware.biometrics.face.xml
-endif
 
 # Audio
 $(call inherit-product, vendor/aosp/config/audio.mk)
