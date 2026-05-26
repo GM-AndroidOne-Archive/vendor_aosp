@@ -110,7 +110,7 @@ PRODUCT_PRODUCT_PROPERTIES += \
     ro.atrace.core.services=com.google.android.gms,com.google.android.gms.ui,com.google.android.gms.persistent \
     ro.com.android.dateformat=MM-dd-yyyy \
     ro.com.google.acsa=true \
-    ro.com.google.clientidbase=android-a1-gm-rev1 \
+    ro.com.google.clientidbase=android-a1-gm-rev2 \
     ro.com.google.gmsversion=9_201903 \
     ro.setupwizard.rotation_locked=true
 
