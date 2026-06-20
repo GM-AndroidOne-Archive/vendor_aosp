@@ -1,5 +1,5 @@
 # Build fingerprint
-BUILD_FINGERPRINT := GM/GM9PRO/GM9PRO_sprout:9/PKQ1.180904.001/314:user/release-keys
+BUILD_FINGERPRINT := GM/GM9PRO/GM9PRO_sprout:8.1.0/OPM1.171019.019/55:user/release-keys
 
 ADDITIONAL_BUILD_PROPERTIES += \
     ro.build.fingerprint=$(BUILD_FINGERPRINT)
